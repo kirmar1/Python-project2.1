@@ -19,10 +19,10 @@ label = Label(app, text = "De label") #label
 label.grid() #puts label on screen
 
 #buttons
-button1 = Button(text = "Buton", width=10, command=label_test)
+button1 = Button(text = "Button", width=10, command=label_test)
 button1.place(x=890, y=0)
 
-button2 = Button(text = "Buton2", width=10)
+button2 = Button(text = "Button2", width=10)
 button2.place(x=890, y=30)
 
 #grafiek

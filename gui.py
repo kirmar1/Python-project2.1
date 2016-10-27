@@ -8,7 +8,7 @@ def label_test():
 root = Tk()
 
 #modify root window
-root.title ("simple GUI")#label
+root.title ("Centrale")#label bovenaan scherm
 root.geometry("1000x600")# size
 
 #labels

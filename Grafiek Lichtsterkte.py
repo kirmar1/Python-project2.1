@@ -12,8 +12,8 @@ serialArduino = serial.Serial('COM3', 9600)
 def plotValues():
     plt.title('Gemeten Lichtsterkte')
     plt.grid(True)
-    plt.ylabel('Lichtsterkte in Lux')
-    plt.plot(values, 'rx-', label='Lichtsterkte')
+    plt.ylabel('Lichtsterkte')
+    plt.plot(values, 'rx-', label='Lux')
     plt.legend(loc='lower right')
 
 
@@ -30,8 +30,8 @@ while True:
     try:
         valueInInt = int(valueRead)
         print(valueInInt)
-        if valueInInt <= 1024:
-            if valueInInt >= 0:
+        if valueInInt <= 1500:
+            if valueInInt >= 100:
                 values.append(valueInInt)
                 values.pop(0)
                 drawnow(plotValues)

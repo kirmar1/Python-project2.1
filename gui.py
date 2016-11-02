@@ -1,4 +1,3 @@
-import Statuslamp
 
 from tkinter import *
 from random import randint

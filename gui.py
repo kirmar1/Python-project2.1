@@ -18,12 +18,13 @@ root.geometry("1000x600")# size
 label = Label( text = "Status:") #label
 label.place(x=50, y=5) #puts label on screen
 
-#buttons
-button1 = Button(text = "Buton", width=10, command=label_test)
-button1.place(x=890, y=0)
+def button(xTemp, yTemp,text):
+    button = Button(text=text, width=10, command=label_test)
+    button.place(x=xTemp, y=yTemp)
 
-button2 = Button(text = "Buton2", width=10)
-button2.place(x=890, y=30)
+#buttons
+button(890,0,'hallo')
+button(890,60,'hallo')
 
 #grafiek
 
@@ -117,7 +118,6 @@ def Status(status):
 
 #kick off event loop
 Status(1)
-
 lijn()
 root.mainloop()
 

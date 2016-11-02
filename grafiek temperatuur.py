@@ -11,15 +11,16 @@ serialArduino = serial.Serial('COM3', 9600)
 
 
 def plotValues():
-    plt.title('Serial value from Arduino')
+    plt.title('Gemeten buitentemperatuur')
     plt.grid(True)
-    plt.ylabel('Values')
-    plt.plot(values, 'rx-', label='values')
-    plt.legend(loc='upper right')
+    plt.ylabel('Graden Celsius')
+    plt.xlabel('Tijd in seconden')
+    plt.plot(values, 'rx-', label='°C')
+    plt.legend(loc='upper left')
 
 
 # pre-load dummy data
-for i in range(0, 26):
+for i in range(0, 11):
     values.append(0)
 
 while True:
@@ -31,7 +32,7 @@ while True:
     try:
         valueInInt = int(valueRead)
         print(valueInInt)
-        if valueInInt <= 1024:
+        if valueInInt <= 35:
             if valueInInt >= 0:
                 values.append(valueInInt)
                 values.pop(0)

@@ -46,7 +46,7 @@ class Plot:
 
     def drawGuiWithTk(self):
         self.guiRoot = Tk() # guiRoot element is to place tkinter widgets on
-        self.guiRoot.title('simple plot')
+        self.guiRoot.title('Temperatuur')
         self.guiControlsFrame = Frame(self.guiRoot, width=200, borderwidth=5)
         self.guiControlsFrame.pack(side=RIGHT, fill=Y, expand=1)
         self.addGuiButtons()

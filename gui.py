@@ -1,8 +1,8 @@
 from tkinter import *
 from random import randint
+import serial
 
-
-
+serialArduino = serial.Serial('COM3', 9600)
 
 #creat window
 root = Tk()
@@ -15,10 +15,16 @@ label = Label( text = "Status:") #label
 label.place(x=50, y=5) #puts label on screen
 
 
+def getValue():
+    valueRead = serialArduino.readline()
+    valueInInt = int(valueRead)
+    print(valueInInt)
+    return valueInInt
+
 
 #variable
 y2 = 0
-var1 = 15
+var1 = getValue()
 var2 = 12
 uur = 0
 Y2tijdelijk = 400
@@ -27,7 +33,7 @@ grafiek = True
 
 #grafiek
 
-canvas = Canvas(root, width=800, height=500, bg='white')
+canvas = Canvas(root, width=800, height=700, bg='white')
 canvas.place(x=10, y=30)
 
 canvas.create_line(50, 400, 765, 400, width=2)  # x-axis    (afstand rand, begin, lengte, einde)
@@ -43,7 +49,7 @@ for i in range(24):
 for i in range(8):
     y = 400 - (i * 50)
     canvas.create_line(50, y, 750, y, width=1, dash=(2, 5))
-    canvas.create_text(40, y, text='%d' % (5 * i), anchor=E)
+    canvas.create_text(40, y, text='%d' % (150 * i), anchor=E)
 
 #layout functie's
 def button(xTemp, yTemp,text,command):
@@ -72,12 +78,11 @@ def lijn():
     y1 = Y2tijdelijk  # hogte op de y ass begin 400 ==0
     Tijdtemp = uur
     x2 = 80 + (Tijdtemp * 30)  # einde lijn schuin 50 == 0
-    y2 = 400 - (var1 * 10)  # lengte lijn 400 ==0
+    y2 = 400 - (var1 * 0.33)  # lengte lijn 400 ==0
     Y2tijdelijk = y2
     canvas.create_line(x1, y1, x2, y2, fill='blue', tags='temp')
-    print(uur, x1, y1, x2, y2, var1)
     uur += 1
-    var1 = randint(0, 35)
+    var1 = getValue()
     if grafiek == True:
         canvas.after(300, lijn)
     elif grafiek == False:
@@ -88,6 +93,7 @@ def lijn():
         print('kijk naar functie lijn')
 
     # lijn
+
 def lijn2():
     global uur, y2, var2, Y2tijdelijk, grafiek
     if uur == 23:
@@ -114,11 +120,13 @@ def lijn2():
         print('kijk naar functie lijn2')
 
 #status lampjes aanmaken
+
 def led(xTemp, collor,reload,functie):
     canvas2 = Canvas(root, width=20, height=20, bg=collor)
     canvas2.place(x=xTemp, y=5)
     if reload == True:
         canvas2.after(300, functie)
+
 def knipper():
     global knipperTemp
     led(100,'white',False,knipper)  # eerste led
@@ -131,6 +139,7 @@ def knipper():
     else:
         led(140,'white',True,knipper)
         knipperTemp = True
+
 def groen():
     led(100, 'green', True, groen) # eerste led
     led(140,'white',False,groen)  # tweede led
@@ -139,6 +148,7 @@ def rood():
     led(100, 'white', False, rood) # eerste led
     led(140,'white',False,rood)  # tweede led
     led(180,'red',True,rood)  # derde led
+
 #geeft de status waar het scherm zich in bevind
 def Status(status):
     if status == 1:

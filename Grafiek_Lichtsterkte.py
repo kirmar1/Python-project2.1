@@ -1,6 +1,7 @@
 import serial
 import matplotlib.pyplot as plt
 from drawnow import *
+from matplotlib.figure import Figure
 
 values = []
 
@@ -15,6 +16,7 @@ def plotValues():
     plt.ylabel('Lichtsterkte')
     plt.plot(values, 'rx-', label='Lux')
     plt.legend(loc='lower right')
+
 
 
 # pre-load dummy data

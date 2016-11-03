@@ -1,19 +1,12 @@
 from tkinter import *
 from random import randint
 
-
-
-
 #creat window
 root = Tk()
 
-#modify root window
+#groote en naam window 'root'
 root.title ("Python")#label
 root.geometry("1000x600")# size
-
-label = Label( text = "Status:") #label
-label.place(x=50, y=5) #puts label on screen
-
 
 
 #variable
@@ -153,6 +146,10 @@ def Status(status):
 #buttons
 button(890, 0, 'hallo',label)
 button(890, 60, 'newGrafiek',newGrafiek)
+#labels
+label = Label( text = "Status:") #label
+label.place(x=50, y=5) #puts label on screen
+
 
 #kick off event loop
 Status(1)

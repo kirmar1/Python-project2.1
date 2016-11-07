@@ -63,14 +63,14 @@ def label():
     label_test = Label( text="De label_test")  # label
     label_test.place(x=250, y=5)  # puts label on screen
 
-def newLichtGrafiek():
+def newTempGrafiek():
     global  yAsVarBer, grafiek
     canvas.delete('ytemp')
     yAs(5)
     yAsVarBer = 10
     grafiek = False
 
-def newTempGrefiek():
+def newLichtGrefiek():
     global yAsVarBer, grafiek
     canvas.delete('ytemp')
     yAs(150)
@@ -175,7 +175,7 @@ label = Label(text="Status:")  # label
 label.place(x=50, y=5)  # puts label on screen
 
 #buttons nieuwe grafiek
-button(840, 30, 'Temperatuur grafiek',newTempGrefiek)
+button(840, 30, 'Temperatuur grafiek',newTempGrafiek)
 button(840, 70, 'Licht grafiek',newLichtGrafiek)
 
 # label Configiratie tempratuur

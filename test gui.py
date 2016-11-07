@@ -53,14 +53,14 @@ def label():
     label_test = Label( text="De label_test")  # label
     label_test.place(x=250, y=5)  # puts label on screen
 
-def newLichtGrafiek():
+def newTempGrafiek():
     global  yAsVarBer, grafiek
     canvas.delete('ytemp')
     yAs(5)
     yAsVarBer = 10
     grafiek = False
 
-def newTempGrefiek():
+def newLichtGrafiek():
     global yAsVarBer, grafiek
     canvas.delete('ytemp')
     yAs(150)
@@ -162,22 +162,32 @@ label = Label(text="Status:")  # label
 label.place(x=50, y=5)  # puts label on screen
 
 #buttons nieuwe grafiek
-button(840, 30, 'Temperatuur grafiek',newTempGrefiek)
+button(840, 30, 'Temperatuur grafiek',newTempGrafiek)
 button(840, 70, 'Licht grafiek',newLichtGrafiek)
 
 # label Configiratie tempratuur
-label = Label( text = "Configuratie: Tempratuur") #label
-label.place(x=840, y=110) #puts label on screen
+label = Label( text = "Configuratie: Scherm") #label
+label.place(x=840, y=120) #puts label on screen
 
-buttonKlein(840,135, 'Plus',label)
-buttonKlein(920,135, 'Min',label)
+buttonKlein(840,145, 'Open',label)
+buttonKlein(920,145, 'Dicht',label)
+
+# label Configiratie licht
+label = Label( text = "Configuratie: Tempratuur") #label
+label.place(x=840, y=190) #puts label on screen
+
+buttonKlein(840,215, 'Plus',label)
+buttonKlein(920,215, 'Min',label)
 
 # label Configiratie licht
 label = Label( text = "Configuratie: Licht") #label
-label.place(x=840, y=200) #puts label on screen
+label.place(x=840, y=260) #puts label on screen
 
-buttonKlein(840,225, 'Plus',label)
-buttonKlein(920,225, 'Min',label)
+buttonKlein(840,285, 'Plus',label)
+buttonKlein(920,285, 'Min',label)
+
+
+
 
 
 

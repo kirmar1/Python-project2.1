@@ -4,7 +4,7 @@ import serial
 
 serialArduino = serial.Serial('COM3', 9600)
 
-#creat window
+#create window
 root = Tk()
 
 #modify root window
@@ -17,9 +17,23 @@ label.place(x=50, y=5) #puts label on screen
 
 def getValue():
     valueRead = serialArduino.readline()
+    if 'L' in str(valueRead):
+        print(str(valueRead))
+        value = getValueOfArduino()
+        return value
+    elif 'T' in str(valueRead):
+        print(str(valueRead))
+        value = getValueOfArduino()
+        return value
+    else:
+        return 0;
+
+def getValueOfArduino():
+    valueRead = serialArduino.readline()
     valueInInt = int(valueRead)
     print(valueInInt)
     return valueInInt
+
 
 
 #variable
@@ -30,6 +44,8 @@ uur = 0
 Y2tijdelijk = 400
 knipperTemp = True
 grafiek = True
+yAsVar = 150
+yAsBerekenen = 0.33
 
 #grafiek
 
@@ -46,26 +62,37 @@ for i in range(24):
     canvas.create_text(x, 410, text='%d' % (1 * i), anchor=N)
 
 # y-axis
-for i in range(8):
-    y = 400 - (i * 50)
-    canvas.create_line(50, y, 750, y, width=1, dash=(2, 5))
-    canvas.create_text(40, y, text='%d' % (150 * i), anchor=E)
+def yAs(yAsVar):
+    for i in range(8):
+        y = 400 - (i * 50)
+        canvas.create_line(50, y, 750, y, width=1, dash=(2, 5), tags='ytemp')
+        canvas.create_text(40, y, text='%d' % (yAsVar * i), anchor=E, tags='ytemp')
+
 
 #layout functie's
 def button(xTemp, yTemp,text,command):
     button = Button(text=text, width=10, command=command)
     button.place(x=xTemp, y=yTemp)
+
 def label():
     label_test = Label( text="De label_test")  # label
     label_test.place(x=250, y=5)  # puts label on screen
+
 def newGrafiek():
-    global grafiek
+    global grafiek, yAsVarBer
     if grafiek == True:
         grafiek = False
+        canvas.delete('ytemp')
+        yAs(5)
+        yAsVarBer = 10
     elif grafiek == False:
         grafiek = True
+        canvas.delete('ytemp')
+        yAs(150)
+        yAsVarBer = 0.33
     else:
         print('kijk naar functie newGrafiek')
+
 
 #lijn functie
 def lijn():
@@ -78,7 +105,7 @@ def lijn():
     y1 = Y2tijdelijk  # hogte op de y ass begin 400 ==0
     Tijdtemp = uur
     x2 = 80 + (Tijdtemp * 30)  # einde lijn schuin 50 == 0
-    y2 = 400 - (var1 * 0.33)  # lengte lijn 400 ==0
+    y2 = 400 - (var1 * yAsBerekenen)  # lengte lijn 400 ==0
     Y2tijdelijk = y2
     canvas.create_line(x1, y1, x2, y2, fill='blue', tags='temp')
     uur += 1
@@ -93,7 +120,6 @@ def lijn():
         print('kijk naar functie lijn')
 
     # lijn
-
 def lijn2():
     global uur, y2, var2, Y2tijdelijk, grafiek
     if uur == 23:
@@ -119,8 +145,8 @@ def lijn2():
     else:
         print('kijk naar functie lijn2')
 
-#status lampjes aanmaken
 
+#status lampjes aanmaken
 def led(xTemp, collor,reload,functie):
     canvas2 = Canvas(root, width=20, height=20, bg=collor)
     canvas2.place(x=xTemp, y=5)
@@ -144,12 +170,13 @@ def groen():
     led(100, 'green', True, groen) # eerste led
     led(140,'white',False,groen)  # tweede led
     led(180,'white',False,groen)  # derde led
+
 def rood():
     led(100, 'white', False, rood) # eerste led
     led(140,'white',False,rood)  # tweede led
     led(180,'red',True,rood)  # derde led
 
-#geeft de status waar het scherm zich in bevind
+# geeft de status waar het scherm zich in bevind
 def Status(status):
     if status == 1:
         groen()
@@ -160,11 +187,13 @@ def Status(status):
     else:
         print('Dit gaat fout check status')
 
-#buttons
+# buttons
 button(890, 0, 'hallo',label)
 button(890, 60, 'newGrafiek',newGrafiek)
 
-#kick off event loop
+# kick off event loop
 Status(1)
 lijn()
+yAs(150)
 root.mainloop()
+

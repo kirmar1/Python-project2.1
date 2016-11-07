@@ -196,4 +196,5 @@ buttonKlein(920,225, 'Min',label)
 Status(1)
 yAs(150)
 lijn()
+
 root.mainloop()

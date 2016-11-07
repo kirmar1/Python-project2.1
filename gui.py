@@ -24,7 +24,7 @@ def getValue():
 
 #variable
 y2 = 0
-var1 = 0
+var1 = getValue()
 var2 = 12
 uur = 0
 Y2tijdelijk = 400

@@ -70,7 +70,7 @@ def newTempGrafiek():
     yAsVarBer = 10
     grafiek = False
 
-def newLichtGrefiek():
+def newLichtGrafiek():
     global yAsVarBer, grafiek
     canvas.delete('ytemp')
     yAs(150)
@@ -179,18 +179,25 @@ button(840, 30, 'Temperatuur grafiek',newTempGrafiek)
 button(840, 70, 'Licht grafiek',newLichtGrafiek)
 
 # label Configiratie tempratuur
-label = Label( text = "Configuratie: Tempratuur") #label
-label.place(x=840, y=110) #puts label on screen
+label = Label( text = "Configuratie: Scherm") #label
+label.place(x=840, y=120) #puts label on screen
 
-buttonKlein(840,135, 'Plus',label)
-buttonKlein(920,135, 'Min',label)
+buttonKlein(840,145, 'Open',label)
+buttonKlein(920,145, 'Dicht',label)
+
+# label Configiratie licht
+label = Label( text = "Configuratie: Tempratuur") #label
+label.place(x=840, y=190) #puts label on screen
+
+buttonKlein(840,215, 'Plus',label)
+buttonKlein(920,215, 'Min',label)
 
 # label Configiratie licht
 label = Label( text = "Configuratie: Licht") #label
-label.place(x=840, y=200) #puts label on screen
+label.place(x=840, y=260) #puts label on screen
 
-buttonKlein(840,225, 'Plus',label)
-buttonKlein(920,225, 'Min',label)
+buttonKlein(840,285, 'Plus',label)
+buttonKlein(920,285, 'Min',label)
 
 #kick off event loop
 Status(1)

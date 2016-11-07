@@ -1,54 +1,28 @@
 from tkinter import *
 from random import randint
-import serial
-
-serialArduino = serial.Serial('COM3', 9600)
 
 #creat window
 root = Tk()
 
-#modify root window
+#groote en naam window 'root'
 root.title ("Python")#label
 root.geometry("1000x600")# size
-
-label = Label( text = "Status:") #label
-label.place(x=50, y=5) #puts label on screen
-
-
-def getValue():
-    valueRead = serialArduino.readline()
-    if 'L' in str(valueRead):
-        print(str(valueRead))
-        value = getValueOfArduino()
-        return value
-    elif 'T' in str(valueRead):
-        print(str(valueRead))
-        value = getValueOfArduino()
-        return value
-    else:
-        return 0;
-
-def getValueOfArduino():
-    valueRead = serialArduino.readline()
-    valueInInt = int(valueRead)
-    print(valueInInt)
-    return valueInInt
 
 
 #variable
 y2 = 0
-var1 = getValue()
-var2 = 12
+var1 = 0
+var2 = 0
 uur = 0
 Y2tijdelijk = 400
 knipperTemp = True
 grafiek = True
-yAsVar = 150
-yAsBerekenen = 0.33
+yAsVarBer = 0.33
+
 
 #grafiek
 
-canvas = Canvas(root, width=800, height=700, bg='white')
+canvas = Canvas(root, width=800, height=500, bg='white')
 canvas.place(x=10, y=30)
 
 canvas.create_line(50, 400, 765, 400, width=2)  # x-axis    (afstand rand, begin, lengte, einde)
@@ -70,31 +44,14 @@ def yAs(yAsVar):
 
 #layout functie's
 def button(xTemp, yTemp,text,command):
-    button = Button(text=text, width=10, command=command)
+    button = Button(text=text, width=16, command=command)
     button.place(x=xTemp, y=yTemp)
-
 def buttonKlein(xTemp, yTemp,text,command):
     button = Button(text=text, width=6, command=command)
     button.place(x=xTemp, y=yTemp)
-
 def label():
     label_test = Label( text="De label_test")  # label
     label_test.place(x=250, y=5)  # puts label on screen
-
-def newGrafiek():
-    global grafiek, yAsVarBer
-    if grafiek == True:
-        grafiek = False
-        canvas.delete('ytemp')
-        yAs(5)
-        yAsVarBer = 10
-    elif grafiek == False:
-        grafiek = True
-        canvas.delete('ytemp')
-        yAs(150)
-        yAsVarBer = 0.33
-    else:
-        print('kijk naar functie newGrafiek')
 
 def newTempGrafiek():
     global  yAsVarBer, grafiek
@@ -110,6 +67,7 @@ def newLichtGrafiek():
     yAsVarBer = 0.33
     grafiek = True
 
+
 #lijn functie
 def lijn():
     global uur,y2 ,var1, Y2tijdelijk, grafiek
@@ -121,11 +79,12 @@ def lijn():
     y1 = Y2tijdelijk  # hogte op de y ass begin 400 ==0
     Tijdtemp = uur
     x2 = 80 + (Tijdtemp * 30)  # einde lijn schuin 50 == 0
-    y2 = 400 - (var1 * yAsBerekenen)  # lengte lijn 400 ==0
+    y2 = 400 - (var1 * yAsVarBer)  # lengte lijn 400 ==0
     Y2tijdelijk = y2
     canvas.create_line(x1, y1, x2, y2, fill='blue', tags='temp')
+    print(uur, x1, y1, x2, y2, var1)
     uur += 1
-    var1 = getValue()
+    var1 = randint(0, 35)
     if grafiek == True:
         canvas.after(300, lijn)
     elif grafiek == False:
@@ -136,7 +95,6 @@ def lijn():
         print('kijk naar functie lijn')
 
     # lijn
-
 def lijn2():
     global uur, y2, var2, Y2tijdelijk, grafiek
     if uur == 23:
@@ -163,13 +121,11 @@ def lijn2():
         print('kijk naar functie lijn2')
 
 #status lampjes aanmaken
-
 def led(xTemp, collor,reload,functie):
     canvas2 = Canvas(root, width=20, height=20, bg=collor)
     canvas2.place(x=xTemp, y=5)
     if reload == True:
         canvas2.after(300, functie)
-
 def knipper():
     global knipperTemp
     led(100,'white',False,knipper)  # eerste led
@@ -182,7 +138,6 @@ def knipper():
     else:
         led(140,'white',True,knipper)
         knipperTemp = True
-
 def groen():
     led(100, 'green', True, groen) # eerste led
     led(140,'white',False,groen)  # tweede led
@@ -191,7 +146,6 @@ def rood():
     led(100, 'white', False, rood) # eerste led
     led(140,'white',False,rood)  # tweede led
     led(180,'red',True,rood)  # derde led
-
 #geeft de status waar het scherm zich in bevind
 def Status(status):
     if status == 1:
@@ -232,8 +186,14 @@ label.place(x=840, y=260) #puts label on screen
 buttonKlein(840,285, 'Plus',label)
 buttonKlein(920,285, 'Min',label)
 
+
+
+
+
+
+
 #kick off event loop
 Status(1)
-yAs(150)
 lijn()
+yAs(150)
 root.mainloop()

@@ -4,7 +4,7 @@ import serial
 
 serialArduino = serial.Serial('COM3', 9600)
 
-#creat window
+#create window
 root = Tk()
 
 #modify root window
@@ -48,7 +48,7 @@ yAsBerekenen = 0.33
 
 #grafiek
 
-canvas = Canvas(root, width=800, height=700, bg='white')
+canvas = Canvas(root, width=800, height=500, bg='white')
 canvas.place(x=10, y=30)
 
 canvas.create_line(50, 400, 765, 400, width=2)  # x-axis    (afstand rand, begin, lengte, einde)
@@ -70,7 +70,7 @@ def yAs(yAsVar):
 
 #layout functie's
 def button(xTemp, yTemp,text,command):
-    button = Button(text=text, width=10, command=command)
+    button = Button(text=text, width=18, command=command)
     button.place(x=xTemp, y=yTemp)
 
 def buttonKlein(xTemp, yTemp,text,command):

@@ -10,17 +10,15 @@ time.sleep(2) # wait for Arduino
 
 i = 0
 
-while (i < 4):
-    # Serial write section
 
-    setTempCar1 = 63
-    ard.flush()
-    setTemp1 = str(setTempCar1)
-    print("Python value sent: ")
-    print(setTemp1)
-    ard.write(setTemp1.encode())
+# Serial write section
+
+test1 = "B650"
+ard.flush()
+ard.write(test1.encode())
+
+while True:
     time.sleep(1)
-
     # Serial read section
     msg = ard.read(ard.inWaiting()) # read all characters in buffer
     print("Message from arduino: ")

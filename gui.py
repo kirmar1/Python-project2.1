@@ -4,7 +4,7 @@ import serial
 
 serialArduino = serial.Serial('COM4', 9600)
 
-#creat window
+#create window
 root = Tk()
 
 #modify root window

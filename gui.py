@@ -2,7 +2,7 @@ from tkinter import *
 from random import randint
 import serial
 
-serialArduino = serial.Serial('COM3', 9600)
+serialArduino = serial.Serial('COM4', 9600)
 
 #create window
 root = Tk()
@@ -15,12 +15,25 @@ label = Label( text = "Status:") #label
 label.place(x=50, y=5) #puts label on screen
 
 
-def getValue():
+def getValueLicht():
     valueRead = serialArduino.readline()
     if 'L' in str(valueRead):
         print(str(valueRead))
         value = getValueOfArduino()
         return value
+    elif 'T' in str(valueRead):
+        print(str(valueRead))
+        print('geen licht')
+        return 0
+    else:
+        return 0;
+
+def getValueTemp():
+    valueRead = serialArduino.readline()
+    if 'L' in str(valueRead):
+        print(str(valueRead))
+        print ("dit is geen temp")
+        return 0
     elif 'T' in str(valueRead):
         print(str(valueRead))
         value = getValueOfArduino()
@@ -125,7 +138,7 @@ def lijn():
     Y2tijdelijk = y2
     canvas.create_line(x1, y1, x2, y2, fill='blue', tags='temp')
     uur += 1
-    var1 = getValue()
+    var1 = getValueLicht()
     if grafiek == True:
         canvas.after(300, lijn)
     elif grafiek == False:
@@ -152,7 +165,7 @@ def lijn2():
     canvas.create_line(x1, y1, x2, y2, fill='blue', tags='temp')
     print(uur, x1, y1, x2, y2, var2)
     uur += 1
-    var2 = randint(0, 35)
+    var2 = getValueTemp()
     if grafiek == False:
         canvas.after(300, lijn2)
     elif grafiek == True:

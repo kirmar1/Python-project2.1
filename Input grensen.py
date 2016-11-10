@@ -21,6 +21,7 @@ def set_onder():
     if len(txt_onder.get()) != 0:
         ondergrens = int(txt_onder.get())
         if ondergrens < huidige_bovengrens:
+            global huidige_ondergrens
             huidige_ondergrens = ondergrens
             ondergrens_tosend =("O"+str(ondergrens))
             print(ondergrens_tosend)
@@ -34,6 +35,7 @@ def set_boven():
     if len(txt_onder.get()) != 0:
         bovengrens = int(txt_boven.get())
         if bovengrens > huidige_ondergrens:
+            global huidige_bovengrens
             huidige_bovengrens = bovengrens
             bovengrens_tosend =("B"+str(bovengrens))
             print(bovengrens_tosend)
@@ -65,12 +67,4 @@ btnSetMaxMin = Button(guiControlsFrame, text="Set bovengrens", command=set_boven
 btnSetMaxMin.pack()
 
 
-def getouput():
-    time.sleep(1)
-    # Serial read section
-    msg = serialArduino.read(serialArduino.inWaiting()) # read all characters in buffer
-    print("Message from arduino: ")
-    print(msg.decode())
-
 guiRoot.mainloop()
-#getouput()

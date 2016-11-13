@@ -1,10 +1,11 @@
 from tkinter import *
-from random import randint
+from tkinter import messagebox
 import serial
 
 serialArduino = serial.Serial('COM3', 9600)
 
-#creat window
+
+#create window
 root = Tk()
 
 #modify root window
@@ -15,12 +16,25 @@ label = Label( text = "Status:") #label
 label.place(x=50, y=5) #puts label on screen
 
 
-def getValue():
+def getValueLicht():
     valueRead = serialArduino.readline()
     if 'L' in str(valueRead):
         print(str(valueRead))
         value = getValueOfArduino()
         return value
+    elif 'T' in str(valueRead):
+        print(str(valueRead))
+        print('geen licht')
+        return 0
+    else:
+        return 0;
+
+def getValueTemp():
+    valueRead = serialArduino.readline()
+    if 'L' in str(valueRead):
+        print(str(valueRead))
+        print ("dit is geen temp")
+        return 0
     elif 'T' in str(valueRead):
         print(str(valueRead))
         value = getValueOfArduino()
@@ -37,7 +51,7 @@ def getValueOfArduino():
 
 #variable
 y2 = 0
-var1 = getValue()
+var1 = getValueLicht()
 var2 = 12
 uur = 0
 Y2tijdelijk = 400
@@ -45,10 +59,12 @@ knipperTemp = True
 grafiek = True
 yAsVar = 150
 yAsBerekenen = 0.33
+huidige_ondergrens = 600
+huidige_bovengrens = 800
 
 #grafiek
 
-canvas = Canvas(root, width=800, height=700, bg='white')
+canvas = Canvas(root, width=800, height=500, bg='white')
 canvas.place(x=10, y=30)
 
 canvas.create_line(50, 400, 765, 400, width=2)  # x-axis    (afstand rand, begin, lengte, einde)
@@ -70,7 +86,7 @@ def yAs(yAsVar):
 
 #layout functie's
 def button(xTemp, yTemp,text,command):
-    button = Button(text=text, width=10, command=command)
+    button = Button(text=text, width=18, command=command)
     button.place(x=xTemp, y=yTemp)
 
 def buttonKlein(xTemp, yTemp,text,command):
@@ -110,6 +126,36 @@ def newLichtGrafiek():
     yAsVarBer = 0.33
     grafiek = True
 
+
+def set_onder():
+    if len(txt_onder.get()) != 0:
+        ondergrens = int(txt_onder.get())
+        if ondergrens < huidige_bovengrens:
+            global huidige_ondergrens
+            huidige_ondergrens = ondergrens
+            ondergrens_tosend =("O"+str(ondergrens))
+            print(ondergrens_tosend)
+            serialArduino.write(ondergrens_tosend.encode())
+        else:
+            messagebox.showerror('Input error', 'Ondergrens ligt boven de bovengrens')
+    else:
+        messagebox.showerror('Input error', 'Voer een geldige waarde in')
+
+def set_boven():
+    if len(txt_boven.get()) != 0:
+        bovengrens = int(txt_boven.get())
+        if bovengrens > huidige_ondergrens:
+            global huidige_bovengrens
+            huidige_bovengrens = bovengrens
+            bovengrens_tosend =("B"+str(bovengrens))
+            print(bovengrens_tosend)
+            serialArduino.write(bovengrens_tosend.encode())
+        else:
+            messagebox.showerror('Input error', 'Bovengrens ligt onder de ondergrens')
+    else:
+        messagebox.showerror('Input error', 'Voer een geldige waarde in')
+
+
 #lijn functie
 def lijn():
     global uur,y2 ,var1, Y2tijdelijk, grafiek
@@ -125,7 +171,7 @@ def lijn():
     Y2tijdelijk = y2
     canvas.create_line(x1, y1, x2, y2, fill='blue', tags='temp')
     uur += 1
-    var1 = getValue()
+    var1 = getValueLicht()
     if grafiek == True:
         canvas.after(300, lijn)
     elif grafiek == False:
@@ -152,7 +198,7 @@ def lijn2():
     canvas.create_line(x1, y1, x2, y2, fill='blue', tags='temp')
     print(uur, x1, y1, x2, y2, var2)
     uur += 1
-    var2 = randint(0, 35)
+    var2 = getValueTemp()
     if grafiek == False:
         canvas.after(300, lijn2)
     elif grafiek == True:
@@ -211,16 +257,17 @@ label.place(x=50, y=5)  # puts label on screen
 button(840, 30, 'Temperatuur grafiek',newTempGrafiek)
 button(840, 70, 'Licht grafiek',newLichtGrafiek)
 
-# label Configiratie tempratuur
+# label Configiratie scherm
 label = Label( text = "Configuratie: Scherm") #label
 label.place(x=840, y=120) #puts label on screen
 
-buttonKlein(840,145, 'Open',label)
+buttonKlein(840,145, 'Open',label,)
 buttonKlein(920,145, 'Dicht',label)
 
-# label Configiratie licht
-label = Label( text = "Configuratie: Tempratuur") #label
+# label Configiratie temperatuur
+label = Label( text = "Configuratie: Temperatuur") #label
 label.place(x=840, y=190) #puts label on screen
+
 
 buttonKlein(840,215, 'Plus',label)
 buttonKlein(920,215, 'Min',label)
@@ -229,8 +276,23 @@ buttonKlein(920,215, 'Min',label)
 label = Label( text = "Configuratie: Licht") #label
 label.place(x=840, y=260) #puts label on screen
 
-buttonKlein(840,285, 'Plus',label)
-buttonKlein(920,285, 'Min',label)
+#input voor de ondergrens van het licht
+label_onder = Label(text="Ondergrens:")
+label_onder.place(x=820,y=280)
+txt_onder = Entry(root)
+txt_onder.insert(0,huidige_ondergrens)
+txt_onder.place(x=820,y=300)
+btnSetMaxMin = Button(root, text="Set", command=set_onder)
+btnSetMaxMin.place(x=960, y=296)
+
+#input voor de bovengrens van het licht
+label_boven = Label(text="Bovengrens:")
+label_boven.place(x=820,y=320)
+txt_boven = Entry(root)
+txt_boven.insert(0,huidige_bovengrens)
+txt_boven.place(x=820, y=340)
+btnSetMaxMin = Button(root, text="Set", command=set_boven)
+btnSetMaxMin.place(x=960, y=336)
 
 #kick off event loop
 Status(1)

@@ -312,11 +312,11 @@ def led(xTemp, collor,reload,functie):
 #geeft de status waar het scherm zich in bevind
 def Status(status):
     if status == 1:
-        tekst = "dicht"
+        tekst = "Dicht"
     elif status == 2:
-        pass
+        tekst = "In/uit rollen"
     elif status == 3:
-        tekst = "open"
+        tekst = "Open"
     else:
         print('Dit gaat fout check status')
     label = Label(text=tekst)  # label
@@ -382,7 +382,6 @@ btnSetMaxMin = Button(root, text="Set", command=set_boven)
 btnSetMaxMin.place(x=960, y=391)
 
 #kick off event loop
-Status(1)
 yAs(150)
 lijn()
 root.mainloop()

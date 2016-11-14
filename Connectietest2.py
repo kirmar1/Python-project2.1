@@ -13,7 +13,7 @@ i = 0
 
 # Serial write section
 
-test1 = "B650"
+test1 = "B1000"
 ard.flush()
 ard.write(test1.encode())
 

@@ -3,7 +3,7 @@ from tkinter import messagebox
 import serial
 
 
-serialArduino = serial.Serial('COM3', 9600)
+serialArduino = serial.Serial('COM4', 9600)
 
 #create window
 root = Tk()
@@ -17,8 +17,6 @@ label.place(x=50, y=5) #puts label on screen
 
 #variable
 y2 = 0
-var1 = getValueLicht()
-var2 = 12
 uur = 0
 Y2tijdelijk = 400
 knipperTemp = True
@@ -27,10 +25,10 @@ yAsVar = 150
 yAsBerekenen = 0.33
 huidige_ondergrens = 600
 huidige_bovengrens = 800
-huidige_bovengrenst = 22
-huidige_ondergrenst = 20
-saveValueLicht = 0
-saveValueTemp = 0
+huidige_bovengrenst = 25
+huidige_ondergrenst = 15
+saveValueLicht = 600
+saveValueTemp = 20
 statusinput = 1
 
 def getValueLicht():
@@ -171,27 +169,33 @@ def newGrafiek():
         print('kijk naar functie newGrafiek')
 
 def newTempGrafiek():
-    global  yAsVarBer, grafiek
+    global  yAsVarBer, grafiek, Y2tijdelijk
     canvas.delete('ytemp')
     yAs(5)
     yAsVarBer = 10
     grafiek = False
+    open =("J1")
+    print('Temp aan',open)
+    serialArduino.write(open.encode())
 
 def newLichtGrafiek():
-    global yAsVarBer, grafiek
+    global yAsVarBer, grafiek, Y2tijdelijk
     canvas.delete('ytemp')
     yAs(150)
     yAsVarBer = 0.33
     grafiek = True
+    dicht =("J0")
+    print('Licht aan',dicht)
+    serialArduino.write(dicht.encode())
 
 def set_open():
-    open =("I"+1)
-    print(open)
+    open =("I1")
+    print('open',open)
     serialArduino.write(open.encode())
 
 def set_dicht():
-    dicht =("I"+0)
-    print(dicht)
+    dicht =("I0")
+    print('dicht',dicht)
     serialArduino.write(dicht.encode())
 
 def set_onder():
@@ -253,6 +257,7 @@ def set_bovent():
 #lijn functie
 def lijn():
     global uur,y2 ,var1, Y2tijdelijk, grafiek
+    var1 = getValueLicht()
     if uur == 23:
         canvas.delete('temp')
         uur = 0
@@ -265,11 +270,10 @@ def lijn():
     Y2tijdelijk = y2
     canvas.create_line(x1, y1, x2, y2, fill='blue', tags='temp')
     uur += 1
-    var1 = getValueLicht()
     if grafiek == True:
-        canvas.after(300, lijn)
+        canvas.after(2000, lijn)
     elif grafiek == False:
-        canvas.after(300, lijn2)
+        canvas.after(2000, lijn2)
         canvas.delete('temp')
         uur = 0
     else:
@@ -279,23 +283,24 @@ def lijn():
 
 def lijn2():
     global uur, y2, var2, Y2tijdelijk, grafiek
+    var2 = getValueTemp()
     if uur == 23:
             canvas.delete('temp')
             uur = 0
     Tijdtemp = uur
     x1 = 50 + (Tijdtemp * 30)  # begin op de x as 50 ==0
     y1 = Y2tijdelijk  # hogte op de y ass begin 400 ==0
+    print("y2",Y2tijdelijk)
     Tijdtemp = uur
     x2 = 80 + (Tijdtemp * 30)  # einde lijn schuin 50 == 0
     y2 = 400 - (var2 * 10)  # lengte lijn 400 ==0
     Y2tijdelijk = y2
     canvas.create_line(x1, y1, x2, y2, fill='blue', tags='temp')
     uur += 1
-    var2 = getValueTemp()
     if grafiek == False:
-        canvas.after(300, lijn2)
+        canvas.after(2000, lijn2)
     elif grafiek == True:
-        canvas.after(300, lijn)
+        canvas.after(2000, lijn)
         canvas.delete('temp')
         uur = 0
     else:
@@ -314,7 +319,7 @@ def Status(status):
     if status == 1:
         tekst = "Dicht"
     elif status == 2:
-        tekst = "In/uit rollen"
+        tekst = ""
     elif status == 3:
         tekst = "Open"
     else:
